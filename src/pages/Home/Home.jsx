@@ -6,15 +6,17 @@ import { Post } from "../../components/Post/Post";
 import { TagsBlock } from "../../components/TagsBlock/TagsBlock";
 import { CommentsBlock } from "../../components/CommentsBlock/CommentsBlock";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPosts } from "../../redux/slices/posts.js";
+import { fetchPosts, fetchTags } from "../../redux/slices/posts.js";
 
 export const Home = () => {
 	const dispatch = useDispatch();
-	const {posts} = useSelector(state => state.posts);
+	const {posts, tags} = useSelector(state => state.posts);
 	const isPostsLoading = posts.status === "loading";
+	const isTagsLoading = tags.status === "loading";
 
 	useEffect(() => {
 		dispatch(fetchPosts());
+		dispatch(fetchTags());
 	}, [dispatch]);
 
 	return (
@@ -54,8 +56,8 @@ export const Home = () => {
 					xs={4}
 					item>
 					<TagsBlock
-						items={["react", "typescript", "article"]}
-						isLoading={false}
+						items={tags.items}
+						isLoading={isTagsLoading}
 					/>
 					<CommentsBlock
 						items={[
